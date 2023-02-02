@@ -133,7 +133,23 @@ Serial.println(humid);
 
 ===============================================================================
 
-3
+3...
+Requirements:
+1. Standard 5mm LED
+2. Two Resistors
+3. Arduino Uno microcontroller board (ATmega328p)
+4. Jumper wires
+5. Push button
+Procedure:
+Step 1: Open www.wokwi.com in browser and select “Arduino Uno” microcontroller.
+Step 2: In the Simulation part, select the above list by clicking “+” symbol, which are specified
+in above requirements.
+Step 3: By using jumper wires, Connect Anode (A-pin) of LED to digital pin 3 of Arduino
+microcontroller through the resistor1 and Cathode (C-pin) of LED to ground.
+Step 4: Give 5volt power supply to pushbutton 1:1L pin.
+Step 5: Connect pushbutton 1:1R to both GND through resistor2&amp; digital pin5.
+Step 6: Write program in “sketch.ino”.
+
 int flag=0;
 voidsetup() {
   // put your setup code here, to run once:
@@ -156,3 +172,51 @@ elseif(value==1&amp;&amp; flag==1)
   flag=0;
 }
 }
+
+=========================================================================================
+12...
+
+Procedure:
+Step 1: Download &amp; install Raspeberri Pi from https://www.raspberrypi.com/software/
+Step 2: Open the raspberry pi terminal and write program
+Program:
+import sys
+importAdafruit_DHT
+import time
+frompaho.mqtt.client import *
+defon_message(client,userdata,msg):
+print(&#39;Channel:&#39;,msg.topic)
+message=str(msg.payload.decode(&#39;utf-8&#39;))
+print(&#39;Message: &#39;,message)
+hum,temp=Adafruit_DHT.read_retry(11,4)
+t=&#39;temp=&#39;+str(temp)
+h=&#39;hum=&#39;+str(hum)
+if message==&#39;Temperature&#39;:
+client.publish(&#39;iotdata&#39;,t)
+if message==&#39;Humidity&#39;:
+client.publsih(&#39;iotdata&#39;,h)
+client=Client(&quot;Device1&quot;)
+c=client.connect(&#39;broker.hivemq.com&#39;,1883)
+if c==0:
+print(&#39;client connected&#39;)
+client.subscribe(&#39;iot&#39;)
+client.on_message=on_message
+client.loop_forever()
+Step 3: Now save it
+
+
+Output:
+python3 dht.py
+client connected
+channel: iotnew
+Message: Temperature
+28.0
+channel: iotnew
+Message: Humidity
+To see the result in Smartphone
+Step 1: Download MQTT Dash app from Play Store.
+Step 2: Open MQTT Dash app in mobile and click on “+” icon.
+Step 3: Enter Name like “mysensor1” and enter “broker.hivemq.com” in Address field.
+
+Step 4: Save it.
+Step 5: Now click on “mysensor1”
